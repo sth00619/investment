@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>슈퍼개미 프로젝트 무료 카톡방</title>
+  <style>
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", Arial, sans-serif;
+      background: #f5f1e7;
+      color: #151515;
+    }
+    .page {
+      width: min(100%, 520px);
+      margin: 0 auto;
+      min-height: 100vh;
+      overflow: hidden;
+      position: relative;
+      padding-bottom: 108px;
+      background: linear-gradient(180deg, #fffdf6 0%, #fffaf0 46%, #ffffff 100%);
+      box-shadow: 0 0 50px rgba(0,0,0,.12);
+    }
+    .gold { color: #b37a14; }
+    .navy { color: #061b3d; }
+    .hero {
+      position: relative;
+      padding: 32px 18px 26px;
+      min-height: 760px;
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.25), rgba(255,255,255,.94) 72%),
+        radial-gradient(circle at 12% 28%, rgba(255,237,178,.6), transparent 34%),
+        radial-gradient(circle at 92% 15%, rgba(248,217,137,.5), transparent 38%),
+        linear-gradient(135deg, #fffdf8 0%, #fff8e8 52%, #ffffff 100%);
+      overflow: hidden;
+    }
+    .hero::before {
+      content: "";
+      position: absolute;
+      inset: 80px -30px auto -80px;
+      height: 360px;
+      opacity: .32;
+      background:
+        linear-gradient(115deg, transparent 0 14%, rgba(206,151,37,.18) 14.3% 14.8%, transparent 15.1% 100%),
+        repeating-linear-gradient(90deg, rgba(210,154,42,.22) 0 5px, transparent 5px 38px),
+        repeating-linear-gradient(0deg, transparent 0 38px, rgba(210,154,42,.15) 38px 40px);
+      clip-path: polygon(0 72%, 14% 56%, 30% 67%, 44% 34%, 56% 49%, 70% 25%, 82% 35%, 100% 2%, 100% 100%, 0 100%);
+    }
+    .hero::after {
+      content: "↗";
+      position: absolute;
+      right: 18px;
+      top: 100px;
+      font-size: 150px;
+      line-height: 1;
+      color: rgba(205,150,38,.28);
+      font-weight: 900;
+      animation: arrowMove 2.8s ease-in-out infinite;
+    }
+    .brand-row {
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      gap: 34px;
+      position: relative;
+      z-index: 4;
+      margin-bottom: 80px;
+    }
+    .brand-row .x { display: none; }
+    .brand {
+      width: 98px;
+      height: 122px;
+      padding: 0;
+      border: none;
+      background: transparent;
+      box-shadow: none;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      gap: 10px;
+      color: #111;
+      font-weight: 900;
+      font-size: 15px;
+      letter-spacing: -1px;
+      position: relative;
+    }
+    .brand::before {
+      content: "";
+      width: 72px;
+      height: 72px;
+      border-radius: 50%;
+      background: #020202;
+      box-shadow: 0 8px 18px rgba(0,0,0,.08);
+      display: block;
+      flex: 0 0 auto;
+    }
+    .brand::after {
+      position: absolute;
+      top: 22px;
+      left: 50%;
+      transform: translateX(-50%) skew(-8deg);
+      width: 72px;
+      height: 28px;
+      text-align: center;
+      color: #fff;
+      font-size: 24px;
+      line-height: 28px;
+      font-weight: 900;
+    }
+    .brand:nth-child(1)::after { content: "₩IFE"; }
+    .brand:nth-child(3)::before { border-radius: 0; width: 72px; height: 72px; }
+    .brand:nth-child(3)::after { content: "Y"; color: #f0c74b; font-size: 38px; top: 15px; text-shadow: 1px 1px 0 #8b6512; transform: translateX(-50%); }
+    .brand:nth-child(5) { display: none; }
+    .hero-copy {
+      position: relative;
+      z-index: 4;
+      padding-top: 0;
+      text-align: center;
+      margin: 0 auto;
+      max-width: 900px;
+    }
+    .eyebrow {
+      font-size: clamp(42px, 10vw, 64px);
+      line-height: 1.05;
+      letter-spacing: -2.8px;
+      font-weight: 1000;
+      color: #151515;
+      margin: 0 0 10px;
+      text-shadow: 0 3px 0 rgba(255,255,255,.7);
+    }
+    .hero-title {
+      margin: 0;
+      font-size: clamp(56px, 15vw, 92px);
+      line-height: 1;
+      letter-spacing: -4px;
+      font-weight: 1000;
+      color: #101010;
+      text-shadow: 0 4px 0 rgba(255,255,255,.62);
+    }
+    .hero-title .gold-text {
+      background: linear-gradient(180deg, #d6a63a 0%, #8a5b0f 48%, #c6962d 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+    .divider, .hero-sub-title { display: none; }
+    .bubble-wrap {
+      position: relative;
+      z-index: 4;
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 44px;
+    }
+    .bubble {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      gap: 13px;
+      min-height: 132px;
+      background: rgba(255,255,255,.72);
+      border-radius: 15px;
+      padding: 17px 9px;
+      box-shadow: 0 10px 20px rgba(107,76,18,.06);
+      border: 1.5px solid rgba(206,151,37,.36);
+      animation: none;
+      backdrop-filter: blur(4px);
+    }
+    .bubble .ico {
+      width: 48px;
+      height: 48px;
+      border-radius: 0;
+      display: grid;
+      place-items: center;
+      color: #c39124;
+      font-size: 39px;
+      background: transparent;
+      flex: 0 0 auto;
+    }
+    .bubble strong {
+      display: block;
+      font-size: clamp(17px, 4.5vw, 22px);
+      line-height: 1.15;
+      color: #1e1e1e;
+      letter-spacing: -1.2px;
+    }
+    .bubble span {
+      display: block;
+      margin-top: 5px;
+      font-size: 13px;
+      font-weight: 800;
+      color: #303030;
+      letter-spacing: -0.5px;
+    }
+    .event-card {
+      position: relative;
+      z-index: 4;
+      margin-top: 42px;
+      min-height: 220px;
+      padding: 42px 34px;
+      border: 1px solid rgba(214,169,58,.55);
+      border-radius: 26px;
+      background:
+        radial-gradient(circle at top right, rgba(255,223,137,.35), transparent 34%),
+        radial-gradient(circle at bottom left, rgba(255,239,196,.95), transparent 42%),
+        linear-gradient(145deg, rgba(255,255,255,.97) 0%, rgba(255,249,236,.96) 48%, rgba(255,255,255,.92) 100%);
+      overflow: hidden;
+      backdrop-filter: blur(14px);
+      box-shadow:
+        0 30px 60px rgba(182,132,29,.10),
+        inset 0 1px 0 rgba(255,255,255,.95),
+        inset 0 -1px 0 rgba(214,169,58,.18);
+    }
+    .event-card::before {
+      content: "EVENT";
+      display: block;
+      text-align: center;
+      letter-spacing: 14px;
+      font-family: Georgia, serif;
+      color: rgba(157,106,18,.72);
+      font-size: 18px;
+      margin-bottom: 26px;
+      text-shadow: 0 1px 0 rgba(255,255,255,.85);
+    }
+    .event-card::after {
+      opacity:.45;
+      content: "↗";
+      position: absolute;
+      right: 18px;
+      bottom: -6px;
+      font-size: 190px;
+      color: rgba(205,150,38,.22);
+      font-weight: 900;
+      line-height: 1;
+      filter: blur(.2px);
+    }
+    .event-card h3 {
+      text-align:center;
+      margin: 0 0 22px;
+      font-size: clamp(34px, 7.6vw, 54px);
+      line-height: .95;
+      letter-spacing: -3px;
+      font-weight: 1000;
+      color: #151515;
+      text-shadow: 0 2px 0 rgba(255,255,255,.85);
+    }
+    .event-card h3 span {
+      color:#c28a22;
+      background:none;
+      -webkit-background-clip:initial;
+      background-clip:initial;
+    }
+    .event-card h3 em {
+      font-style:normal;
+      display:block;
+      font-size:clamp(64px, 15vw, 108px);
+      line-height:.9;
+      letter-spacing:-6px;
+      margin:14px 0 10px;
+      font-weight:1000;
+      background:linear-gradient(180deg,#ff9e9e 0%,#ff3d3d 18%,#db0000 58%,#7f0000 100%);
+      -webkit-background-clip:text;
+      background-clip:text;
+      color:transparent;
+      text-shadow:
+        0 10px 24px rgba(255,0,0,.14),
+        0 2px 0 rgba(255,255,255,.35);
+    }
+    .event-card p {
+      margin: 0;
+      color: #2a2a2a;
+      font-size: 19px;
+      line-height: 1.85;
+      font-weight: 700;
+      text-align:center;
+      letter-spacing:-0.6px;
+    }
+    .result-strip {
+      position: relative;
+      z-index: 4;
+      margin-top: 28px;
+      border: 1.5px solid rgba(217,156,45,.72);
+      border-radius: 22px;
+      background:
+        linear-gradient(90deg, rgba(255,255,255,.94) 0%, rgba(255,247,229,.96) 50%, rgba(255,255,255,.94) 100%);
+      padding: 0;
+      display: grid;
+      grid-template-columns: 1fr 1.08fr 1fr;
+      align-items: center;
+      justify-content: center;
+      gap: 0;
+      min-height: 144px;
+      overflow: hidden;
+      box-shadow:
+        0 18px 34px rgba(126,83,10,.12),
+        inset 0 1px 0 rgba(255,255,255,.95),
+        inset 0 -1px 0 rgba(217,156,45,.14);
+    }
+    .result-strip .trophy { display: none; }
+    .result-strip p { display: contents; margin: 0; font-size: 0; }
+    .result-strip b {
+      font-size: clamp(38px, 9.8vw, 64px);
+      color: #b37a14;
+      letter-spacing:-2.5px;
+      line-height: .95;
+      font-weight: 1000;
+      text-shadow:0 2px 0 rgba(255,255,255,.85);
+    }
+    .result-strip b span { font-size:.55em; color:#1a1a1a; letter-spacing:-1px; margin-left:2px; }
+    .result-strip .metric {
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap:12px;
+      text-align: center;
+      font-weight: 1000;
+      color: #151515;
+      border-right: 1px solid rgba(188,143,47,.28);
+      padding: 20px 12px;
+      min-height: 144px;
+      background: radial-gradient(circle at 50% 0%, rgba(255,234,181,.32), transparent 58%);
+    }
+    .result-strip .metric:last-child { border-right: none; }
+    .result-strip .metric .icon {
+      display:grid;
+      place-items:center;
+      width:72px;
+      height:72px;
+      border-radius:50%;
+      font-size:42px;
+      margin-bottom:0;
+      color:#bd8a25;
+      background: radial-gradient(circle at 35% 25%, #fff6cd 0%, #f1c762 48%, #b87914 100%);
+      box-shadow: inset 0 2px 0 rgba(255,255,255,.75), 0 10px 18px rgba(154,106,18,.18);
+      flex:0 0 72px;
+    }
+    .result-strip .metric small {
+      display:inline-block;
+      font-size: clamp(18px, 4.2vw, 24px);
+      color:#1f1f1f;
+      font-weight:1000;
+      letter-spacing:-1.2px;
+      white-space: nowrap;
+    }
+    .result-strip .metric-score { gap:12px; background: linear-gradient(90deg, rgba(255,255,255,.78), rgba(255,244,218,.78), rgba(255,255,255,.78)); }
+    .result-strip .metric-score b {
+      font-size: clamp(45px, 11vw, 74px);
+      background:linear-gradient(180deg,#ff7777 0%,#df1717 52%,#8b0505 100%);
+      -webkit-background-clip:text;
+      background-clip:text;
+      color:transparent;
+      letter-spacing:-3px;
+    }
+    .result-strip .laurel { color:#c69a34; font-size:44px; font-weight:900; opacity:.9; transform: scaleY(1.25); }
+    .result-strip .metric-rate b { color:#d21b1b; }
+    .contact-band {
+      margin: 20px 18px 0;
+      border: 1.5px solid rgba(196,140,28,.55);
+      border-radius: 18px;
+      background: linear-gradient(90deg, rgba(255,255,255,.96), rgba(255,248,231,.96));
+      color: #171717;
+      padding: clamp(20px, 4vw, 26px) clamp(16px, 4vw, 28px);
+      display: grid;
+      grid-template-columns: clamp(58px, 12vw, 78px) 1fr;
+      gap: clamp(14px, 3vw, 22px);
+      align-items: center;
+      min-height: 128px;
+      box-shadow: 0 18px 34px rgba(106,75,14,.10), inset 0 1px 0 rgba(255,255,255,.95);
+    }
+    .chat-icon, .phone-icon {
+      width: 70px;
+      height: 70px;
+      border-radius: 50%;
+      background: linear-gradient(145deg, #2d210e, #8d6416);
+      color: #ffe18b;
+      display: grid;
+      place-items: center;
+      font-size: 20px;
+      font-weight:1000;
+      letter-spacing:-1px;
+      box-shadow: 0 10px 18px rgba(92,59,8,.16);
+    }
+    .contact-band .text1 {
+      font-size: clamp(19px, 4.5vw, 34px);
+      font-weight: 1000;
+      line-height: 1.22;
+      letter-spacing:-1.6px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 8px;
+      min-width: 0;
+    }
+    .contact-band .text1 p { margin: 0; white-space: normal; word-break: keep-all; }
+    .contact-band .text1 span { color: #d21b1b; display:inline; margin-top:0; font-size: 1.04em; }
+    .phone-row { grid-column: 1 / -1; display: flex; align-items: center; justify-content: center; gap: 12px; padding-top: 12px; border-top: 1px solid rgba(196,140,28,.25); }
+    .phone-row strong { font-size: clamp(28px, 8vw, 40px); letter-spacing: -1.5px; color: #191919; text-shadow: none; }
+    .note-line { padding: 14px 10px 22px; text-align: center; color: #666; font-size: 12px; line-height: 1.7; background: #fffdf7; }
+    .black-bridge {
+      background: linear-gradient(90deg, #141414 0%, #050505 50%, #141414 100%);
+      color: #f4cf74;
+      text-align: center;
+      padding: 26px 18px 24px;
+      border-top: 1px solid rgba(244,207,116,.45);
+      border-bottom: 1px solid rgba(244,207,116,.45);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.08), inset 0 -1px 0 rgba(255,255,255,.06);
+    }
+    .bridge-sub { font-size: 17px; font-weight: 900; letter-spacing: -0.7px; margin-bottom: 8px; color: #f7dc98; }
+    .bridge-title { display: flex; align-items: center; justify-content: center; gap: 14px; font-size: clamp(28px, 7vw, 40px); line-height: 1.15; font-weight: 1000; letter-spacing: -1.8px; }
+    .bridge-title::before, .bridge-title::after { content: ""; width: 48px; height: 2px; background: linear-gradient(90deg, transparent, #f4cf74); }
+    .bridge-title::after { background: linear-gradient(90deg, #f4cf74, transparent); }
+    .project { padding: 38px 18px 20px; position: relative; background: linear-gradient(180deg, #ffffff 0%, #fffdf7 70%, #fffaf1 100%); }
+    .project::before { content: ""; position: absolute; inset: 0; background: linear-gradient(135deg, transparent 0%, rgba(206,154,41,.06) 100%); pointer-events: none; }
+    .project > * { position: relative; z-index: 1; }
+    .project-title { text-align: center; margin: 0; color: #071c41; font-size: clamp(40px, 11vw, 63px); line-height: .98; letter-spacing: -3px; font-weight: 1000; }
+    .project-title small { display: block; font-size: clamp(25px, 6vw, 36px); letter-spacing: -1.5px; margin-bottom: 6px; }
+    .project-desc { margin: 22px 0 20px; text-align: center; color: #071c41; font-size: clamp(17px, 4.5vw, 22px); line-height: 1.45; font-weight: 900; }
+    .feature-row { display: grid; grid-template-columns: 1fr; gap: 10px; margin-bottom: 26px; }
+    .feature-card { display: flex; align-items: center; gap: 13px; padding: 15px 14px; border-radius: 14px; background: rgba(255,255,255,.86); border: 1.5px solid rgba(196,140,28,.6); box-shadow: 0 8px 18px rgba(7,28,65,.06); transition: .25s ease; }
+    .feature-card:hover { transform: translateY(-4px); }
+    .feature-card .round { width: 54px; height: 54px; border-radius: 50%; background: linear-gradient(145deg, #f5d478, #9f6c10); color: #fff; display: grid; place-items: center; font-size: 27px; flex: 0 0 54px; }
+    .feature-card strong { display: block; color: #071c41; font-size: 19px; line-height: 1.2; }
+    .feature-card span { display: block; margin-top: 4px; color: #26324a; font-size: 13px; line-height: 1.4; font-weight: 700; }
+    .table-title { margin: 8px 0 14px; text-align: center; color: #071c41; font-size: clamp(30px, 8vw, 43px); letter-spacing: -2px; font-weight: 1000; }
+    .stock-table-wrap { overflow-x: auto; border: 2px solid #c18c22; border-radius: 16px; background: #fff; box-shadow: 0 10px 22px rgba(7,28,65,.08); }
+    table { width: 100%; border-collapse: collapse; min-width: 620px; font-size: 14px; text-align: center; color: #071c41; }
+    th { background: #06204b; color: #fff; padding: 9px 6px; font-size: 15px; }
+    td { border: 1px solid #d8d8d8; padding: 8px 6px; font-weight: 800; background: rgba(255,255,255,.94); }
+    td.plus { color: #e21a1a; }
+    td.minus { color: #1159bf; }
+    .score-box { margin: 22px 4px 20px; padding: 18px 14px; border-radius: 18px; color: #fff; background: linear-gradient(90deg, #061c43, #06265b); border: 3px solid #d2a040; box-shadow: inset 0 0 0 2px rgba(255,255,255,.17), 0 10px 20px rgba(7,28,65,.18); display: flex; align-items: center; justify-content: center; gap: 14px; text-align: center; }
+    .score-box .laurel { font-size: 43px; color: #f3cd65; }
+    .score-box p { margin: 0; font-size: clamp(22px, 6vw, 33px); font-weight: 1000; }
+    .score-box b { color: #f3cd65; font-size: 1.4em; }
+    .quote { text-align: center; color: #071c41; font-size: clamp(22px, 6vw, 34px); line-height: 1.4; letter-spacing: -1px; font-weight: 950; margin: 22px 0; }
+    .quote span { color: #c18c22; }
+    .link-btn { width: 100%; max-width: 420px; margin: 0 auto 18px; display: flex; align-items: center; justify-content: center; gap: 10px; border: none; border-radius: 14px; padding: 18px 14px; background: linear-gradient(90deg, #f3c967, #d7a338); color: #151515; font-size: clamp(18px, 5vw, 25px); font-weight: 1000; box-shadow: 0 10px 22px rgba(120,83,13,.18); cursor: pointer; white-space: nowrap; }
+    .link-btn .circle { width: 32px; height: 32px; border-radius: 50%; background: #151515; color: #f2c75e; display: flex; align-items: center; justify-content: center; flex-shrink: 0; align-self: center; }
+    .safe-note { max-width: 420px; margin: 0 auto; padding: 14px; border-radius: 13px; background: #fff8e2; border: 1px solid rgba(196,140,28,.42); color: #333; text-align: center; font-size: 16px; font-weight: 900; }
+    .reveal { opacity: 0; transform: translateY(34px); transition: opacity .7s ease, transform .7s ease; }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+    .cta-fixed { position: fixed; left: 50%; bottom: 16px; transform: translateX(-50%); width: min(440px, calc(100% - 34px)); z-index: 20; }
+    .cta-fixed button { width: 100%; border: none; border-radius: 12px; padding: 18px 14px; font-size: clamp(18px, 5vw, 24px); font-weight: 1000; color: #151515; background: linear-gradient(90deg, #f3c967, #d7a338 55%, #f8dda0); box-shadow: 0 14px 30px rgba(150,101,9,.23); cursor: pointer; animation: pulseButton 1.7s ease-in-out infinite; }
+    .modal-bg { position: fixed; inset: 0; background: rgba(0,0,0,.72); display: none; align-items: center; justify-content: center; padding: 18px; z-index: 30; }
+    .modal-bg.active { display: flex; }
+    .modal { width: min(390px, 100%); background: #fff; color: #071c41; border-radius: 24px; padding: 24px; position: relative; border: 3px solid #d2a040; animation: modalUp .22s ease-out; }
+    .close { position: absolute; right: 15px; top: 10px; border: none; background: transparent; font-size: 28px; cursor: pointer; }
+    .modal h2 { margin: 12px 0 8px; font-size: 25px; letter-spacing: -1px; }
+    .modal p { color: #555; margin: 0 0 16px; font-weight: 700; }
+    input { width: 100%; border: 1px solid #d7d7d7; border-radius: 12px; padding: 14px; font-size: 16px; margin-bottom: 10px; }
+    .submit { width: 100%; border: none; border-radius: 12px; padding: 15px; font-size: 17px; font-weight: 1000; color: #151515; background: #d8a338; cursor: pointer; }
+    .success { display: none; text-align: center; padding: 20px 0 8px; }
+    .success.active { display: block; }
+    .form-area.hidden { display: none; }
+    .check { font-size: 54px; margin-bottom: 8px; }
+    @media (min-width: 768px) {
+      body { padding: 34px 0; }
+      .page { width: min(92vw, 980px); border-radius: 22px; }
+      .hero { min-height: 860px; padding: 46px 46px 42px; }
+      .brand-row { margin-bottom: 92px; }
+      .eyebrow { font-size: clamp(56px, 6vw, 70px); }
+      .hero-title { font-size: clamp(76px, 8vw, 106px); }
+      .bubble-wrap { max-width: 860px; margin-left: auto; margin-right: auto; gap: 16px; }
+      .event-card { max-width: 900px; margin-left: auto; margin-right: auto; }
+      .result-strip { max-width: 900px; margin-left: auto; margin-right: auto; }
+      .contact-band { margin-left: auto; margin-right: auto; max-width: 900px; grid-template-columns: 78px 1fr; }
+      .contact-band .text1 { font-size: 30px; }
+      .feature-row { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+      .cta-fixed { width: min(520px, calc(100% - 60px)); }
+    }
+    @media (max-width: 390px) {
+      .hero { padding-left: 14px; padding-right: 14px; min-height: 720px; }
+      .brand-row { gap: 18px; margin-bottom: 58px; }
+      .brand { width: 82px; height: 105px; font-size: 13px; }
+      .brand::before { width: 62px; height: 62px; }
+      .brand::after { top: 18px; width: 62px; font-size: 20px; transform: translateX(-50%) skew(-8deg); }
+      .brand:nth-child(3)::before { width: 62px; height: 62px; }
+      .brand:nth-child(3)::after { top: 11px; font-size: 34px; transform: translateX(-50%); }
+      .eyebrow { font-size: 40px; letter-spacing: -2px; }
+      .hero-title { font-size: 54px; letter-spacing: -3px; }
+      .bubble { min-height: 120px; padding: 14px 6px; }
+      .bubble .ico { font-size: 32px; }
+      .bubble strong { font-size: 16px; }
+      .bubble span { font-size: 12px; }
+      .event-card { padding: 34px 16px; border-radius: 22px; }
+      .event-card::before { letter-spacing: 9px; }
+      .event-card h3 em { font-size: 58px; letter-spacing: -4px; }
+      .event-card p { font-size: 15px; line-height: 1.75; }
+      .result-strip { min-height: 126px; grid-template-columns: 1fr 1.1fr 1fr; }
+      .result-strip .metric { min-height: 126px; padding: 16px 4px; gap: 5px; flex-direction: column; }
+      .result-strip .metric .icon { width: 50px; height: 50px; font-size: 30px; }
+      .result-strip .metric small { font-size: 14px; }
+      .result-strip b { font-size: 34px; }
+      .result-strip .metric-score b { font-size: 38px; }
+      .result-strip .laurel { display:none; }
+      .contact-band { grid-template-columns: 58px 1fr; padding: 18px 14px; gap: 12px; min-height: 116px; }
+      .chat-icon { width: 56px; height: 56px; font-size: 16px; }
+      .contact-band .text1 { font-size: clamp(17px, 4.7vw, 19px); letter-spacing: -1px; gap: 7px; }
+      th, td { font-size: 13px; }
+    }
+    @media (max-width: 340px) { .contact-band .text1 { font-size: 16px; } }
+    @keyframes arrowMove { 0%, 100% { transform: translate(0,0); } 50% { transform: translate(8px,-10px); } }
+    @keyframes pulseButton { 0%, 100% { transform: translateY(0); box-shadow: 0 14px 30px rgba(150,101,9,.23); } 50% { transform: translateY(-3px); box-shadow: 0 20px 38px rgba(150,101,9,.34); } }
+    @keyframes modalUp { from { opacity: 0; transform: translateY(18px) scale(.97); } to { opacity: 1; transform: translateY(0) scale(1); } }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <section class="hero">
+      <div class="brand-row">
+        <div class="brand">주식와이프</div><div class="x">×</div><div class="brand">와이투유</div><div class="x">×</div><div class="brand">협업 프로젝트</div>
+      </div>
+      <div class="hero-copy">
+        <p class="eyebrow">코스피 7천시대</p>
+        <h1 class="hero-title"><span class="gold-text">슈퍼개미</span><br>프로젝트</h1>
+        <div class="divider"></div>
+        <h2 class="hero-sub-title">무료 카톡방 OPEN</h2>
+      </div>
+      <div class="bubble-wrap">
+        <div class="bubble"><div class="ico">📈</div><div><strong>시장 흐름</strong><span>실시간 체크</span></div></div>
+        <div class="bubble"><div class="ico">🔎</div><div><strong>종목 정보</strong><span>핵심만 정리</span></div></div>
+        <div class="bubble"><div class="ico">💡</div><div><strong>투자 인사이트</strong><span>쉽고 빠르게</span></div></div>
+      </div>
+      <div class="event-card reveal">
+        <h3><span>5월!</span><br><em>7천 코스피</em><br>달성 이벤트!</h3>
+        <p>
+          2026년 새로운 신고가를 달성하고 있는 코스피<br>
+          우리에게 주어진 마지막 부자될 기회!<br><br>
+          슈퍼개미 프로젝트를 통해 <strong>5월 불같은 수익</strong> 얻어가세요!
+        </p>
+      </div>
+
+      <div class="result-strip reveal">
+        <div class="metric metric-trophy">
+          <span class="icon">🏆</span>
+          <div><small>총</small> <b>20</b><small>종목 진행</small></div>
+        </div>
+        <div class="metric metric-score">
+          <span class="laurel">❬</span>
+          <b>19<span>승</span> 1<span>패</span></b>
+          <span class="laurel">❭</span>
+        </div>
+        <div class="metric metric-rate">
+          <span class="icon">◎</span>
+          <div><small>승률</small> <b>95%</b></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="contact-band">
+      <div class="chat-icon">TALK</div>
+      <div class="text1">
+        <p>5월 한달간 무료 카톡방에서 진행하는 이벤트!</p>
+        <p>딱 한달만 <span>무료로 진행되니</span> 체험해보세요!</p>
+      </div>
+    </section>
+    <div class="note-line">※ 협업 업체 운영 &nbsp; | &nbsp; ※ 투자 판단은 개인의 책임입니다 &nbsp; | &nbsp; ※ 무료방 종료 후 유료서비스로 전환됩니다</div>
+
+    <div class="black-bridge">
+      <div class="bridge-sub">주식와이프 X 와이투유 협업</div>
+      <div class="bridge-title">슈퍼개미 프로젝트</div>
+    </div>
+
+    <section class="project">
+      <h2 class="project-title reveal"><small>주식와이프 X 와이투유 협업</small>슈퍼개미 프로젝트</h2>
+      <p class="project-desc reveal">이데일리 출연 전문가와 함께<br>실제 종목 진행 내역과 매매 흐름을 확인하는 프로젝트</p>
+
+      <div class="feature-row reveal">
+        <div class="feature-card"><div class="round">📊</div><div><strong>오늘의 시황 체크</strong><span>시장 흐름과 주요 지수 핵심 체크</span></div></div>
+        <div class="feature-card"><div class="round">🎯</div><div><strong>관심 종목 포인트</strong><span>주목 종목의 핵심 포인트와 전략 제시</span></div></div>
+        <div class="feature-card"><div class="round">📋</div><div><strong>핵심 이슈 빠른 정리</strong><span>시장 이슈와 테마를 빠르게 정리</span></div></div>
+      </div>
+
+      <h3 class="table-title reveal">최근 종목 진행내역</h3>
+      <div class="stock-table-wrap reveal">
+        <table>
+          <thead>
+            <tr><th>종목명</th><th>매수일</th><th>매수가</th><th>매도일</th><th>매도가</th><th>수익률</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>DL이앤씨</td><td>04월 01일</td><td>72,500</td><td>04월 03일</td><td>78,900</td><td class="plus">8.8%</td></tr>
+            <tr><td>대우건설</td><td>04월 06일</td><td>17,310</td><td>04월 08일</td><td>19,010</td><td class="plus">9.8%</td></tr>
+            <tr><td>심텍</td><td>04월 08일</td><td>69,200</td><td>04월 16일</td><td>74,000</td><td class="plus">6.9%</td></tr>
+            <tr><td>SK오션플랜트</td><td>04월 08일</td><td>26,600</td><td>04월 13일</td><td>24,200</td><td class="minus">-9.0%</td></tr>
+            <tr><td>미래에셋벤처투자</td><td>04월 13일</td><td>29,950</td><td>04월 14일</td><td>32,500</td><td class="plus">8.5%</td></tr>
+            <tr><td>가온전선</td><td>04월 15일</td><td>129,400</td><td>04월 16일</td><td>136,400</td><td class="plus">5.4%</td></tr>
+            <tr><td>SKC</td><td>04월 16일</td><td>122,000</td><td>05월 07일</td><td>177,000</td><td class="plus">45.1%</td></tr>
+            <tr><td>고영</td><td>04월 17일</td><td>33,000</td><td>04월 24일</td><td>36,800</td><td class="plus">11.5%</td></tr>
+            <tr><td>삼성SDI</td><td>04월 17일</td><td>513,000</td><td>04월 21일</td><td>590,000</td><td class="plus">15.0%</td></tr>
+            <tr><td>DB하이텍</td><td>04월 20일</td><td>126,700</td><td>04월 23일</td><td>133,500</td><td class="plus">5.4%</td></tr>
+            <tr><td>POSCO홀딩스</td><td>04월 21일</td><td>422,000</td><td>04월 28일</td><td>450,000</td><td class="plus">6.6%</td></tr>
+            <tr><td>한화엔진</td><td>04월 22일</td><td>67,500</td><td>04월 23일</td><td>71,000</td><td class="plus">5.2%</td></tr>
+            <tr><td>대한전선</td><td>04월 24일</td><td>42,850</td><td>04월 28일</td><td>45,000</td><td class="plus">5.0%</td></tr>
+            <tr><td>세명전기</td><td>04월 27일</td><td>13,460</td><td>04월 29일</td><td>14,150</td><td class="plus">5.1%</td></tr>
+            <tr><td>POSCO홀딩스</td><td>04월 28일</td><td>462,000</td><td>05월 04일</td><td>510,000</td><td class="plus">10.4%</td></tr>
+            <tr><td>대한광통신</td><td>05월 04일</td><td>17,700</td><td>05월 07일</td><td>21,000</td><td class="plus">18.6%</td></tr>
+            <tr><td>미래에셋증권</td><td>05월 06일</td><td>76,000</td><td>05월 06일</td><td>81,000</td><td class="plus">6.6%</td></tr>
+            <tr><td>한솔테크닉스</td><td>05월 07일</td><td>9,150</td><td>05월 08일</td><td>10,300</td><td class="plus">12.6%</td></tr>
+            <tr><td>현대무벡스</td><td>05월 08일</td><td>34,450</td><td>05월 08일</td><td>36,100</td><td class="plus">4.8%</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="score-box reveal"><div class="laurel">🏆</div><p>총 <b>20</b>종목 진행&nbsp; | &nbsp;<b>19승 1패</b></p></div>
+      <div class="quote reveal">“ 들어오셔서 <span>1주씩만</span> 매매해보셔도<br>실력은 바로 확인하실 수 있습니다 ”</div>
+      <button class="link-btn reveal" onclick="goKakao()"><span>🔗</span> 참여는 아래 게시글 링크 확인 <span class="circle">›</span></button>
+      <div class="safe-note reveal">🛡 무료방 종료 후 유료서비스로 전환됩니다</div>
+    </section>
+  </main>
+
+  <div class="cta-fixed no-capture">
+    <button onclick="goKakao()">무료 카톡방 참여 문의하기</button>
+  </div>
+
+
+  <script>
+    const KAKAO_URL = 'https://open.kakao.com/o/gXpcb2ti';
+    function goKakao() { window.open(KAKAO_URL, '_blank'); }
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.14 });
+    document.querySelectorAll('.reveal').forEach((el) => observer.observe(el));
+  </script>
+</body>
+</html>
